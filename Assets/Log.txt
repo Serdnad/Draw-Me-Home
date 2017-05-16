@@ -1,0 +1,44 @@
+﻿/****************************
+ * this is a log of what needs to be worked on.
+ * it should be updated when something is accomplished,
+ * and when something needs to be completed.
+ * It should also include a log of updates and/or
+ * improvements that are started. finally, a list of
+ * everything that has to be done before final publication should be included.
+ * 
+ * Tip: Please remember you are encouraged to use a need/fulfilled type log of updates.
+ * 
+ * Began: 6/9/15
+ * 
+ * - Graphics
+ * -> Player
+ * -> House
+ * -> Dot
+ * -> Buttons
+ * -> Other (To be later determined
+ * - Scripting
+ * -> Drawing Mechanisms - CHECK: silky smooth, now measured by distance drawn - (kind of, distance varies depending on speed... but silky as heck now
+ * --> Don't draw on certain objets (enemies, goal, buttons, fill, etc.)
+ * -> Buttons
+ * -> Player/Enemy/Goal Interaction
+ * -> Level Selection 
+ * -> Main Menu
+ * -> Graphic Details (moving eyes, etc.)
+ * -> Other (To be later determined
+ * - Additional
+ * -> Game Music
+ * -> Sound Effects
+ * -> Game Listing
+ * -> Other (To be later determined
+ * 
+ * Final Publication:
+ * Comb through settings, disable internal profiler, temp settings, etc.
+ * 
+ * Final Notes: This is the second project fully and solely completed by Andres Gutierrez,
+ * beginning with an idea, and ending with publlication on the google play store, as well as possibly any other app markets and platforms.
+ * 
+ * UPDATE: ok, so im not using the log as much as i first saw myself doing so... (not at all). so im just gonna throw any notes to myself down here. anyway,
+ * remember to stick annoying sound effects into everything, like dying, and beating a level, oh, and clicking buttons. find/make (read: find) some new music,
+ * uh, oh yeah, ADS ADS ADS. whole reason youre doing this, pretty much. also, remove debug logs and options, extra stuff, compress, etc, but thats obvious.
+ * See if you can advertise for free somehow/somehere. Oh, and if you're not too bothered, maybe try fixing the distance/speed drawing issue. And the googly/following
+ * eyes, figure that stuff out. Ok, bye for now. read this eventually please...
