@@ -14,9 +14,11 @@ public class LevelSelect : MonoBehaviour
     public Texture2D buttonLevelLocked;
     private float fadeAlpha = 0;
     public GUIStyle levelText;
-    private string levelToLoad = "";
+    public string levelToLoad = "";
     public AudioListener listener;
     public GUIStyle titleText;
+
+    public AsyncOperation nextScene = null;
 
     //void showAd(CBLocation CBL) {
     //	Chartboost.showInterstitial (CBL);
@@ -45,6 +47,9 @@ public class LevelSelect : MonoBehaviour
         //	showAd(CBLocation.LevelStart);
         fadeAlpha = 0;
         levelToLoad = "";
+        //var sceneLevelSelect = SceneManager.LoadSceneAsync("Level Select");
+        //sceneLevelSelect.allowSceneActivation = false;
+        //SceneManager.LoadSceneAsync("Level " + SceneManager.GetActiveScene().buildIndex);
     }
 
     private void OnGUI()
@@ -133,12 +138,18 @@ public class LevelSelect : MonoBehaviour
 
         if (levelToLoad != "")
         {
-            if (fadeAlpha <= 1)
-                fadeAlpha += 0.06f;
-            else if (levelToLoad != "" && fadeAlpha >= 1)
+            if (nextScene == null)
             {
-                Application.LoadLevel(levelToLoad);
+                nextScene = SceneManager.LoadSceneAsync(levelToLoad);
+                nextScene.allowSceneActivation = false;
+            }
+
+            fadeAlpha += 0.06f;
+            if (fadeAlpha >= 1f)
+            {
+                nextScene.allowSceneActivation = true;
                 levelToLoad = "";
+                nextScene = null;
             }
         }
 
@@ -146,7 +157,8 @@ public class LevelSelect : MonoBehaviour
 
     private void OnApplicationPause()
     {
-        ///if exitted, quit.
-        //Application.Quit ();
+        //if exitted, quit.
+        //Time.timeScale = 0;
+        //AudioListener.pause = true;
     }
 }

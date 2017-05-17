@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Draw : MonoBehaviour
 {
     private readonly float maxInk = 200;
     public Texture2D clearButton;
     public AudioClip audioClick;
-    public string levelToLoad = "";
+    public AudioClip audioDraw;
     public float fadeAlpha = 0;
+
 
     //GUI
     public Texture2D drawButton;
@@ -28,6 +30,13 @@ public class Draw : MonoBehaviour
     public Texture2D button;
     public Texture2D buttonBack;
 
+    public GameObject MainCamera;
+
+    private void Start()
+    {
+        MainCamera = GameObject.Find("Main Camera");
+    }
+
     private void Update()
     {
         if (GameObject.FindGameObjectWithTag("Player"))
@@ -35,6 +44,8 @@ public class Draw : MonoBehaviour
 
         if (Input.GetMouseButton(0) && (inkUsed < maxInk || !drawing) && !player)
         {
+            //MainCamera.GetComponent<AudioSource>().Stop();
+
             // && !player) { //drawing, goo remains, and not playing.
             var mousePos = Input.mousePosition;
             mousePos.z = 10;
@@ -57,6 +68,8 @@ public class Draw : MonoBehaviour
             }
             else
             {
+                //MainCamera.GetComponents<AudioSource>()[1].Play();
+
                 var distance = Vector2.Distance(pos, prevPos);
                 if (distance > 0.1)
                 {
@@ -66,8 +79,13 @@ public class Draw : MonoBehaviour
                         var drawPos = Vector2.Lerp(prevPos, pos, i / total);
                         if (drawing)
                         {
-                            Instantiate(drawnDot, new Vector3(drawPos.x, drawPos.y, 0), Quaternion.identity);
-                            inkUsed++;
+                            if (inkUsed < maxInk)
+                            {
+                                Instantiate(drawnDot, new Vector3(drawPos.x, drawPos.y, 0), Quaternion.identity);
+                                inkUsed++;
+                            }
+                            else
+                                break;
                         }
                         else
                         {
@@ -81,6 +99,7 @@ public class Draw : MonoBehaviour
         else
         {
             prevPos = new Vector3(-1, -1, -1);
+            //MainCamera.GetComponents<AudioSource>()[1].Stop();
         }
     }
 
@@ -105,7 +124,7 @@ public class Draw : MonoBehaviour
         if (GUI.Button(new Rect(Screen.width - (2 * (buttonWidth + Screen.width / 24)), Screen.width / 24, buttonWidth, buttonWidth), editButton, GUIStyle.none))
         {
             drawing = !drawing;
-            AudioSource.PlayClipAtPoint(audioClick, this.transform.position, 100);
+            MainCamera.GetComponent<AudioSource>().PlayOneShot(audioClick);
         }
 
         //Play/Stop Buttons
@@ -118,7 +137,7 @@ public class Draw : MonoBehaviour
                 spawnPos.y = 1.25f; // += new Vector3(0, 3, 0);
                 Instantiate(Resources.Load("Player"), spawnPos, Quaternion.identity); //create player
                 Camera.main.GetComponent<LevelSelect>().adRuns++;
-                AudioSource.PlayClipAtPoint(audioClick, this.transform.position, 100);
+                MainCamera.GetComponent<AudioSource>().PlayOneShot(audioClick);
             }
         }
         else if (player)
@@ -127,15 +146,15 @@ public class Draw : MonoBehaviour
             if (GUI.Button(new Rect(Screen.width - (buttonWidth + Screen.width / 24), Screen.width / 24, buttonWidth, buttonWidth), stopButton, GUIStyle.none))
             {
                 DestroyObject(player.gameObject);
-                AudioSource.PlayClipAtPoint(audioClick, this.transform.position, 100);
+                MainCamera.GetComponent<AudioSource>().PlayOneShot(audioClick);
             }
         }
 
         float iconMargin = buttonWidth / 6;
         if (GUI.Button(new Rect(Screen.width / 24, Screen.width / 24, buttonWidth, buttonWidth), button, GUIStyle.none))
         {
-            levelToLoad = "Level Select";
-            AudioSource.PlayClipAtPoint(audioClick, this.transform.position, 100);
+            GameObject.Find("Main Camera").GetComponent<LevelSelect>().levelToLoad = "Level Select";
+            MainCamera.GetComponent<AudioSource>().PlayOneShot(audioClick);
         }
         GUI.Box(new Rect(Screen.width / 24 + iconMargin, Screen.width / 24 + iconMargin, buttonWidth - 2*iconMargin, buttonWidth - 2*iconMargin), buttonBack, GUIStyle.none);
 
@@ -147,21 +166,5 @@ public class Draw : MonoBehaviour
         GUI.color = new Color(1, 1, 1);
         GUI.DrawTexture(new Rect(Screen.width / 24 + (buttonWidth - barWidth) / 2, Screen.width / 12 + buttonWidth, barWidth,
                 (Screen.height / 8) * (maxInk-inkUsed)/maxInk), inkBar, ScaleMode.ScaleToFit);
-
-
-        var fadeBlack = Resources.Load("white") as Texture2D;
-        GUI.color = new Color(0, 0, 0, fadeAlpha);
-        GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), fadeBlack);
-
-        if (levelToLoad != "")
-        {
-            if (fadeAlpha <= 1)
-                fadeAlpha += 0.06f;
-            else if (fadeAlpha >= 1)
-            {
-                Application.LoadLevel(levelToLoad);
-                levelToLoad = "";
-            }
-        }
     }
 }

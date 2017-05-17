@@ -2,7 +2,7 @@
 
 public class EraserBehaviour : MonoBehaviour
 {
-    private bool collisionChecked;
+    private bool collisionChecked = false;
 
     private void Update()
     {

@@ -43,6 +43,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clearButton: {fileID: 0}
   audioClick: {fileID: 8300000, guid: f13b943109316b04dbec5258cf5df0aa, type: 3}
+  audioDraw: {fileID: 0}
+  fadeAlpha: 0
   drawButton: {fileID: 2800000, guid: 9b48a8e199d75bd458bf61761ac5d713, type: 3}
   drawnDot: {fileID: 118076, guid: 8e64630bf2e555943abafc6803d5cc26, type: 2}
   eraseButton: {fileID: 2800000, guid: 862517940b75d324eac7604538bf51e2, type: 3}
@@ -55,6 +57,7 @@ MonoBehaviour:
   tutorial: {fileID: 2800000, guid: c2475e4bd87d3c444ad5154fdc13fd3f, type: 3}
   button: {fileID: 2800000, guid: 1481338077c8d2d49962afe3bd7aa18e, type: 3}
   buttonBack: {fileID: 2800000, guid: 71c7e51c7e454ae4d81fccc1e1582e41, type: 3}
+  MainCamera: {fileID: 0}
 --- !u!212 &21207006
 SpriteRenderer:
   m_ObjectHideFlags: 1

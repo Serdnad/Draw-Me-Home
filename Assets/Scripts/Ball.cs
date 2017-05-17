@@ -1,43 +1,42 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Ball : MonoBehaviour
 {
-    private float fadeAlpha = -1;
     public AudioClip audioHit;
     public AudioClip audioWin;
+    private bool playing = true;
+    public GameObject MainCamera;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Finish" && fadeAlpha == -1)
+        if (playing)
         {
-            PlayerPrefs.SetInt("Current Level", Application.loadedLevel - 1);
-            fadeAlpha = 0;
-            AudioSource.PlayClipAtPoint(audioWin, this.transform.position, 100);
-        }
-        else if (collision.gameObject.tag == "Enemy")
-        {
-            Destroy(gameObject);
-            AudioSource.PlayClipAtPoint(audioHit, this.transform.position, 100);
-            //Handheld.Vibrate();
+            if (collision.gameObject.tag == "Finish")
+            {
+                playing = false;
+                PlayerPrefs.SetInt("Current Level", SceneManager.GetActiveScene().buildIndex - 1);
+                MainCamera = GameObject.Find("Main Camera");
+                MainCamera.GetComponent<LevelSelect>().levelToLoad = "Level " + (SceneManager.GetActiveScene().buildIndex).ToString();
+                MainCamera.GetComponent<AudioSource>().PlayOneShot(audioWin);
+            }
+            else if (collision.gameObject.tag == "Enemy")
+            {
+                Destroy(gameObject);
+                MainCamera.GetComponent<AudioSource>().PlayOneShot(audioHit);
+                //AudioSource.PlayClipAtPoint(audioHit, this.transform.position, 100);
+                //Handheld.Vibrate();
+            }
         }
     }
 
     //If ball falls off screen
     private void OnBecameInvisible()
     {
-        Destroy(gameObject);
-        AudioSource.PlayClipAtPoint(audioHit, this.transform.position, 100);
-    }
-
-    private void OnGUI()
-    {
-        var fadeBlack = Resources.Load("white") as Texture2D;
-        GUI.color = new Color(0, 0, 0, fadeAlpha);
-        GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), fadeBlack);
-
-        if (fadeAlpha <= 1 && fadeAlpha != -1)
-            fadeAlpha += 0.06f;
-        else if (fadeAlpha >= 1f)
-            Application.LoadLevel(Application.loadedLevel + 1);
+        if (playing)
+        {
+            Destroy(gameObject);
+            AudioSource.PlayClipAtPoint(audioHit, this.transform.position, 100);
+        }
     }
 }
